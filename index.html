@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V.JOKI — Bantuan Tugas Sekolah & Kuliah Profesional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+:root {
+  --primary: #12C6E7;
+  --secondary: #22D3EE;
+  --accent: #67E8F9;
+  --dark: #082F49;
+  --bg: #F8FAFC;
+  --card: #FFFFFF;
+  --text-dark: #0F172A;
+  --text-muted: #475569;
+  --text-light: #94A3B8;
+  --border: rgba(18,198,231,0.18);
+  --glass: rgba(255,255,255,0.72);
+  --shadow-sm: 0 1px 3px rgba(8,47,73,0.08), 0 1px 2px rgba(8,47,73,0.06);
+  --shadow: 0 4px 20px rgba(8,47,73,0.10), 0 2px 8px rgba(18,198,231,0.08);
+  --shadow-lg: 0 20px 60px rgba(8,47,73,0.14), 0 8px 24px rgba(18,198,231,0.12);
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-dark);overflow-x:hidden;line-height:1.6}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:4px}
+
+/* SCROLL PROGRESS */
+#scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;z-index:9999;transition:width 0.1s}
+
+/* LOADING SCREEN */
+#loader{position:fixed;inset:0;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:99999;transition:opacity 0.6s,visibility 0.6s}
+#loader.hide{opacity:0;visibility:hidden}
+.loader-inner{text-align:center}
+.loader-logo{font-size:2.8rem;font-weight:800;letter-spacing:-1px;color:#fff;margin-bottom:12px;opacity:0;animation:loaderFade 0.5s 0.3s forwards}
+.loader-logo span{color:var(--primary)}
+.loader-bar{width:160px;height:3px;background:rgba(255,255,255,0.15);border-radius:99px;overflow:hidden;margin:0 auto}
+.loader-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:99px;animation:loaderBar 1.5s ease forwards}
+@keyframes loaderFade{to{opacity:1}}
+@keyframes loaderBar{from{width:0}to{width:100%}}
+
+/* NAVBAR */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 1.5rem;transition:all 0.3s}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
+nav.scrolled{background:rgba(248,250,252,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.nav-logo{font-size:1.5rem;font-weight:800;letter-spacing:-0.5px;color:var(--dark);text-decoration:none;display:flex;align-items:center;gap:4px}
+.nav-logo span{color:var(--primary)}
+.nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.875rem;font-weight:500;padding:6px 14px;border-radius:8px;transition:all 0.2s}
+.nav-links a:hover{color:var(--primary);background:rgba(18,198,231,0.08)}
+.nav-cta{background:var(--primary);color:#fff!important;padding:8px 20px!important;border-radius:10px!important;font-weight:600!important;font-size:0.875rem!important;transition:all 0.2s!important;box-shadow:0 4px 14px rgba(18,198,231,0.35)!important}
+.nav-cta:hover{background:var(--secondary)!important;transform:translateY(-1px)!important;box-shadow:0 6px 20px rgba(18,198,231,0.45)!important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+.hamburger span{display:block;width:22px;height:2px;background:var(--dark);border-radius:2px;transition:all 0.3s}
+.hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:68px;left:0;right:0;background:rgba(248,250,252,0.97);backdrop-filter:blur(20px);padding:1rem 1.5rem 1.5rem;border-bottom:1px solid var(--border);z-index:999;box-shadow:var(--shadow)}
+.mobile-menu.open{display:block}
+.mobile-menu li{list-style:none;border-bottom:1px solid var(--border)}
+.mobile-menu a{display:block;padding:13px 0;color:var(--text-dark);text-decoration:none;font-weight:500;font-size:0.95rem}
+.mobile-menu .mob-cta{background:var(--primary);color:#fff!important;text-align:center;border-radius:12px;margin-top:0.75rem;border:none!important;padding:14px 0!important}
+
+/* SECTION COMMON */
+section{padding:90px 1.5rem}
+.container{max-width:1200px;margin:0 auto}
+.section-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(18,198,231,0.1);border:1px solid rgba(18,198,231,0.25);color:var(--primary);padding:6px 16px;border-radius:99px;font-size:0.8rem;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:1rem}
+.section-title{font-size:clamp(1.75rem,4vw,2.6rem);font-weight:800;letter-spacing:-0.5px;line-height:1.2;color:var(--text-dark)}
+.section-sub{font-size:1rem;color:var(--text-muted);line-height:1.7;max-width:560px}
+.text-primary{color:var(--primary)}
+
+/* HERO */
+#beranda{padding:160px 1.5rem 90px;position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#EFF8FB 0%,#F8FAFC 40%,#E8F7FB 100%);z-index:0}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.hero-blob-1{width:600px;height:600px;background:radial-gradient(circle,rgba(18,198,231,0.18) 0%,transparent 70%);top:-100px;right:-100px}
+.hero-blob-2{width:400px;height:400px;background:radial-gradient(circle,rgba(103,232,249,0.15) 0%,transparent 70%);bottom:-50px;left:-50px}
+.hero-blob-3{width:200px;height:200px;background:radial-gradient(circle,rgba(34,211,238,0.2) 0%,transparent 70%);top:40%;left:45%}
+.float-shape{position:absolute;border-radius:50%;opacity:0.35;animation:floatAnim 6s ease-in-out infinite;z-index:0}
+.fs1{width:60px;height:60px;background:var(--primary);top:20%;right:18%;animation-delay:-1s}
+.fs2{width:40px;height:40px;background:var(--accent);top:65%;right:12%;animation-delay:-3s;border-radius:12px}
+.fs3{width:25px;height:25px;background:var(--secondary);top:30%;left:8%;animation-delay:-5s}
+.fs4{width:80px;height:80px;background:rgba(18,198,231,0.25);bottom:15%;right:25%;animation-delay:-2s;border-radius:20px;transform:rotate(20deg)}
+@keyframes floatAnim{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(8deg)}}
+.hero-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-text{}
+.hero-alert{display:inline-flex;align-items:center;gap:8px;background:rgba(18,198,231,0.1);border:1px solid rgba(18,198,231,0.3);border-radius:99px;padding:6px 16px;font-size:0.8rem;font-weight:600;color:var(--primary);margin-bottom:1.5rem;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(18,198,231,0.3)}50%{box-shadow:0 0 0 8px rgba(18,198,231,0)}}
+.hero-headline{font-size:clamp(2.2rem,5.5vw,3.6rem);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:1.25rem;color:var(--text-dark)}
+.hero-sub{font-size:1.1rem;color:var(--text-muted);line-height:1.7;margin-bottom:2rem;max-width:480px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:2rem}
+.badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);padding:6px 14px;border-radius:99px;font-size:0.8rem;font-weight:600;color:var(--text-dark);box-shadow:var(--shadow-sm)}
+.badge-check{color:var(--primary);font-weight:700}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn-primary{background:var(--primary);color:#fff;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:0.95rem;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s;box-shadow:0 6px 24px rgba(18,198,231,0.4)}
+.btn-primary:hover{background:var(--secondary);transform:translateY(-2px);box-shadow:0 10px 30px rgba(18,198,231,0.5)}
+.btn-secondary{background:#fff;color:var(--primary);text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:0.95rem;display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--primary);transition:all 0.25s}
+.btn-secondary:hover{background:rgba(18,198,231,0.06);transform:translateY(-2px)}
+.hero-visual{position:relative;z-index:1;display:flex;justify-content:center}
+.hero-card-wrap{position:relative}
+.hero-main-card{background:#fff;border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow-lg);border:1px solid var(--border);max-width:340px;position:relative}
+.hero-card-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.hero-avatar{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.1rem;flex-shrink:0}
+.hero-card-tag{font-size:0.75rem;color:var(--text-light);font-weight:500}
+.hero-card-title{font-size:0.9rem;font-weight:700;color:var(--text-dark)}
+.hero-stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem}
+.hero-stat{background:rgba(18,198,231,0.07);border-radius:12px;padding:12px;text-align:center}
+.hero-stat-num{font-size:1.3rem;font-weight:800;color:var(--primary)}
+.hero-stat-lbl{font-size:0.7rem;color:var(--text-muted);font-weight:500}
+.hero-service-list{display:flex;flex-direction:column;gap:8px;margin-top:1rem}
+.hero-service-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg);border-radius:10px;font-size:0.82rem;font-weight:500;color:var(--text-dark)}
+.hsi-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);flex-shrink:0}
+.floating-pill{position:absolute;background:#fff;border-radius:99px;padding:8px 16px;box-shadow:var(--shadow);border:1px solid var(--border);font-size:0.78rem;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px;z-index:2}
+.fp1{top:-18px;left:-30px;color:var(--primary);animation:floatAnim 5s ease-in-out infinite}
+.fp2{bottom:-14px;right:-20px;color:#10B981;animation:floatAnim 4s ease-in-out infinite reverse}
+.fp3{top:50%;left:-50px;transform:translateY(-50%);color:#F59E0B;animation:floatAnim 6s ease-in-out infinite;animation-delay:-2s}
+
+/* STATS */
+#stats-section{padding:0 1.5rem 70px}
+.stats-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.stat-card{background:#fff;border-radius:var(--radius);padding:2rem 1.5rem;text-align:center;border:1px solid var(--border);box-shadow:var(--shadow-sm);transition:all 0.3s}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.stat-num{font-size:2.5rem;font-weight:800;color:var(--primary);line-height:1;letter-spacing:-1px}
+.stat-label{font-size:0.875rem;color:var(--text-muted);font-weight:500;margin-top:6px}
+.stat-icon{font-size:1.75rem;margin-bottom:10px}
+
+/* LAYANAN */
+#layanan{background:var(--bg)}
+.layanan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;margin-top:3rem}
+.layanan-card{background:#fff;border-radius:var(--radius);padding:1.5rem 1.25rem;border:1px solid var(--border);transition:all 0.3s;cursor:default;position:relative;overflow:hidden}
+.layanan-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(18,198,231,0.05),transparent);opacity:0;transition:opacity 0.3s}
+.layanan-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:rgba(18,198,231,0.35)}
+.layanan-card:hover::before{opacity:1}
+.layanan-card:hover .layanan-icon{background:var(--primary);transform:scale(1.1)}
+.layanan-card:hover .layanan-icon span{filter:grayscale(1) brightness(10)}
+.layanan-icon{width:48px;height:48px;border-radius:12px;background:rgba(18,198,231,0.1);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1rem;transition:all 0.3s}
+.layanan-name{font-size:0.9rem;font-weight:700;color:var(--text-dark);margin-bottom:4px}
+.layanan-desc{font-size:0.78rem;color:var(--text-muted);line-height:1.5}
+.layanan-special{grid-column:1/-1;background:linear-gradient(135deg,var(--dark) 0%,#0e4a6e 100%);border:none;color:#fff;padding:2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.layanan-special::before{display:none}
+.layanan-special:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(8,47,73,0.3)}
+.ls-text h3{font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:6px}
+.ls-text p{font-size:0.875rem;color:rgba(255,255,255,0.7);line-height:1.6;max-width:480px}
+.ls-btn{background:var(--primary);color:#fff;text-decoration:none;padding:12px 24px;border-radius:10px;font-weight:700;font-size:0.875rem;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;transition:all 0.2s;box-shadow:0 4px 14px rgba(18,198,231,0.4)}
+.ls-btn:hover{background:var(--secondary);transform:translateY(-1px)}
+
+/* KEUNGGULAN */
+#keunggulan{background:linear-gradient(180deg,#EFF8FB 0%,#F8FAFC 100%)}
+.keunggulan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.keunggulan-card{background:rgba(255,255,255,0.8);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.9);border-radius:var(--radius-lg);padding:2rem;transition:all 0.3s;position:relative;overflow:hidden}
+.keunggulan-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(18,198,231,0.07),transparent);opacity:0;transition:opacity 0.3s;pointer-events:none}
+.keunggulan-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(18,198,231,0.15),0 8px 24px rgba(8,47,73,0.1);border-color:rgba(18,198,231,0.4)}
+.keunggulan-card:hover::after{opacity:1}
+.keunggulan-icon{font-size:2rem;margin-bottom:1rem;display:inline-block;padding:12px;background:rgba(18,198,231,0.1);border-radius:14px;transition:all 0.3s;line-height:1}
+.keunggulan-card:hover .keunggulan-icon{background:var(--primary);transform:scale(1.05)}
+.keunggulan-title{font-size:1rem;font-weight:700;color:var(--text-dark);margin-bottom:6px}
+.keunggulan-desc{font-size:0.84rem;color:var(--text-muted);line-height:1.6}
+
+/* CARA PEMESANAN */
+#cara-pemesanan{background:#fff}
+.steps-wrap{margin-top:3.5rem;position:relative}
+.steps-line{position:absolute;top:32px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:0;margin:0 100px}
+.steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;position:relative;z-index:1}
+.step-item{text-align:center}
+.step-num{width:64px;height:64px;border-radius:50%;background:var(--primary);color:#fff;font-size:1.25rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:0 8px 24px rgba(18,198,231,0.35);position:relative;transition:all 0.3s}
+.step-item:hover .step-num{transform:scale(1.1);box-shadow:0 12px 30px rgba(18,198,231,0.5)}
+.step-icon{font-size:1.5rem;position:absolute;top:-16px;right:-8px;background:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;box-shadow:var(--shadow-sm)}
+.step-title{font-size:0.88rem;font-weight:700;color:var(--text-dark);margin-bottom:4px}
+.step-desc{font-size:0.75rem;color:var(--text-muted);line-height:1.5}
+
+/* TESTIMONI */
+#testimoni{background:linear-gradient(180deg,#F8FAFC 0%,#EFF8FB 100%)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.testi-card{background:#fff;border-radius:var(--radius-lg);padding:1.75rem;border:1px solid var(--border);transition:all 0.3s;position:relative;overflow:hidden}
+.testi-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(18,198,231,0.3)}
+.testi-stars{color:#F59E0B;font-size:1rem;margin-bottom:12px;letter-spacing:1px}
+.testi-text{font-size:0.9rem;color:var(--text-dark);line-height:1.6;margin-bottom:1.25rem;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#fff;flex-shrink:0}
+.testi-name{font-size:0.85rem;font-weight:700;color:var(--text-dark)}
+.testi-role{font-size:0.75rem;color:var(--text-muted)}
+.testi-quote{position:absolute;top:1rem;right:1.25rem;font-size:3rem;color:rgba(18,198,231,0.12);font-family:Georgia,serif;line-height:1;pointer-events:none}
+
+/* FAQ */
+#faq{background:#fff}
+.faq-wrap{max-width:760px;margin:3rem auto 0;display:flex;flex-direction:column;gap:0.75rem}
+.faq-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all 0.3s}
+.faq-item.open{border-color:rgba(18,198,231,0.4);box-shadow:0 4px 20px rgba(18,198,231,0.1)}
+.faq-q{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.93rem;font-weight:600;color:var(--text-dark);gap:1rem}
+.faq-arrow{width:24px;height:24px;border-radius:50%;background:rgba(18,198,231,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s;color:var(--primary)}
+.faq-item.open .faq-arrow{background:var(--primary);color:#fff;transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;padding:0 1.5rem}
+.faq-a-inner{padding-bottom:1.25rem;font-size:0.875rem;color:var(--text-muted);line-height:1.7}
+.faq-item.open .faq-a{max-height:200px}
+
+/* CTA SECTION */
+#cta{background:linear-gradient(135deg,var(--dark) 0%,#0e4a6e 50%,#0a3a5c 100%);position:relative;overflow:hidden}
+.cta-blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.cta-blob-1{width:500px;height:500px;background:rgba(18,198,231,0.2);top:-200px;right:-100px}
+.cta-blob-2{width:300px;height:300px;background:rgba(103,232,249,0.15);bottom:-100px;left:-50px}
+.cta-content{position:relative;z-index:1;text-align:center;max-width:660px;margin:0 auto}
+.cta-content .section-badge{background:rgba(18,198,231,0.2);border-color:rgba(18,198,231,0.4);color:var(--accent)}
+.cta-title{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:800;color:#fff;letter-spacing:-0.5px;margin:1rem 0;line-height:1.2}
+.cta-sub{color:rgba(255,255,255,0.7);font-size:1rem;line-height:1.7;margin-bottom:2rem}
+.cta-btn{background:var(--primary);color:#fff;text-decoration:none;padding:16px 36px;border-radius:14px;font-weight:700;font-size:1rem;display:inline-flex;align-items:center;gap:10px;transition:all 0.25s;box-shadow:0 8px 30px rgba(18,198,231,0.5);margin-bottom:2rem}
+.cta-btn:hover{background:var(--secondary);transform:translateY(-2px);box-shadow:0 14px 40px rgba(18,198,231,0.6)}
+.cta-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.cta-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 16px;border-radius:99px;font-size:0.78rem;font-weight:600;backdrop-filter:blur(4px)}
+
+/* FOOTER */
+footer{background:var(--dark);padding:60px 1.5rem 30px;color:#fff}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-logo{font-size:1.75rem;font-weight:800;letter-spacing:-0.5px;color:#fff;margin-bottom:0.75rem}
+.footer-logo span{color:var(--primary)}
+.footer-desc{font-size:0.875rem;color:rgba(255,255,255,0.6);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.footer-contact{display:flex;flex-direction:column;gap:8px}
+.footer-contact a{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.footer-contact a:hover{color:var(--primary)}
+.footer-contact-icon{font-size:1rem}
+.footer-col-title{font-size:0.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:1.25rem}
+.footer-links{display:flex;flex-direction:column;gap:0.75rem}
+.footer-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.875rem;transition:color 0.2s}
+.footer-links a:hover{color:var(--primary)}
+.footer-wa-btn{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700;font-size:0.875rem;margin-top:1.5rem;transition:all 0.2s;box-shadow:0 4px 14px rgba(18,198,231,0.35)}
+.footer-wa-btn:hover{background:var(--secondary);transform:translateY(-1px)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:0.8rem;color:rgba(255,255,255,0.4)}
+.footer-tagline{font-size:0.8rem;color:rgba(255,255,255,0.35)}
+
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:900;background:#25D366;color:#fff;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(37,211,102,0.4);text-decoration:none;transition:all 0.25s;font-size:1.5rem}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 12px 30px rgba(37,211,102,0.55)}
+.wa-tooltip{position:absolute;right:70px;top:50%;transform:translateY(-50%);background:var(--dark);color:#fff;padding:6px 14px;border-radius:8px;font-size:0.75rem;font-weight:600;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.wa-float:hover .wa-tooltip{opacity:1}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-content{grid-template-columns:1fr;gap:3rem}
+  .hero-visual{display:none}
+  .keunggulan-grid{grid-template-columns:repeat(2,1fr)}
+  .steps-line{display:none}
+  .steps-grid{grid-template-columns:repeat(3,1fr);gap:1.5rem}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  section{padding:70px 1.25rem}
+  .nav-links,.nav-cta{display:none!important}
+  .hamburger{display:flex}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .layanan-grid{grid-template-columns:repeat(2,1fr)}
+  .keunggulan-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .hero-headline{font-size:2.2rem;letter-spacing:-1px}
+  .layanan-special{flex-direction:column;text-align:center}
+  .ls-btn{align-self:center}
+}
+@media(max-width:480px){
+  #beranda{padding:120px 1.25rem 70px}
+  .layanan-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">V<span>.</span>JOKI</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20bertanya%20tentang%20layanan%20yang%20tersedia." target="_blank" class="wa-float" aria-label="Chat WhatsApp">
+  <span class="wa-tooltip">Chat WhatsApp</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#beranda" class="nav-logo">V<span>.</span>JOKI</a>
+    <ul class="nav-links">
+      <li><a href="#beranda">Beranda</a></li>
+      <li><a href="#layanan">Layanan</a></li>
+      <li><a href="#keunggulan">Keunggulan</a></li>
+      <li><a href="#testimoni">Testimoni</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+      <li><a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20bertanya%20tentang%20layanan%20yang%20tersedia." class="nav-cta" target="_blank">Pesan Sekarang</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<ul class="mobile-menu" id="mobile-menu">
+  <li><a href="#beranda" class="mob-link">Beranda</a></li>
+  <li><a href="#layanan" class="mob-link">Layanan</a></li>
+  <li><a href="#keunggulan" class="mob-link">Keunggulan</a></li>
+  <li><a href="#testimoni" class="mob-link">Testimoni</a></li>
+  <li><a href="#faq" class="mob-link">FAQ</a></li>
+  <li><a href="#kontak" class="mob-link">Kontak</a></li>
+  <li><a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20memesan%20layanan." class="mob-cta">Pesan Sekarang</a></li>
+</ul>
+
+<!-- HERO -->
+<section id="beranda">
+  <div class="hero-bg"></div>
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-blob hero-blob-3"></div>
+  <div class="float-shape fs1"></div>
+  <div class="float-shape fs2"></div>
+  <div class="float-shape fs3"></div>
+  <div class="float-shape fs4"></div>
+  <div class="hero-content">
+    <div class="hero-text" data-aos="fade-right" data-aos-duration="800">
+      <div class="hero-alert">🚨 Deadline Mepet? Kami Siap!</div>
+      <h1 class="hero-headline">Deadline Mepet?<br><span class="text-primary">Jangan Panik!</span></h1>
+      <p class="hero-sub">Bantu selesaikan tugas sekolah dan kuliah dengan cepat, rapi, dan profesional. Dari makalah hingga presentasi, V.JOKI siap membantu.</p>
+      <div class="hero-badges">
+        <span class="badge"><span class="badge-check">✅</span> Harga Bersahabat</span>
+        <span class="badge"><span class="badge-check">✅</span> Deadline Mendadak Bisa</span>
+        <span class="badge"><span class="badge-check">✅</span> Fast Response</span>
+      </div>
+      <div class="hero-btns">
+        <a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20memesan%20layanan." target="_blank" class="btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Pesan Sekarang
+        </a>
+        <a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20konsultasi%20terlebih%20dahulu." target="_blank" class="btn-secondary">
+          💬 Konsultasi Gratis
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual" data-aos="fade-left" data-aos-duration="800" data-aos-delay="200">
+      <div class="hero-card-wrap">
+        <div class="floating-pill fp1">🚀 Fast Response 24/7</div>
+        <div class="floating-pill fp2">✅ Hasil Profesional</div>
+        <div class="floating-pill fp3">⭐ 98% Puas</div>
+        <div class="hero-main-card">
+          <div class="hero-card-header">
+            <div class="hero-avatar">VJ</div>
+            <div>
+              <div class="hero-card-title">V.JOKI Dashboard</div>
+              <div class="hero-card-tag">Jasa Tugas Terpercaya</div>
+            </div>
+          </div>
+          <div class="hero-stats-row">
+            <div class="hero-stat"><div class="hero-stat-num">500+</div><div class="hero-stat-lbl">Tugas Selesai</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">98%</div><div class="hero-stat-lbl">Kepuasan</div></div>
+          </div>
+          <div class="hero-service-list">
+            <div class="hero-service-item"><span class="hsi-dot"></span>📄 Makalah & Essay</div>
+            <div class="hero-service-item"><span class="hsi-dot"></span>📊 PPT Presentasi</div>
+            <div class="hero-service-item"><span class="hsi-dot"></span>📋 Laporan & Proposal</div>
+            <div class="hero-service-item"><span class="hsi-dot"></span>🎨 Desain Pamflet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="stat-icon">📚</div>
+      <div class="stat-num counter" data-target="500">0</div><span class="stat-num" style="color:var(--primary)">+</span>
+      <div class="stat-label">Tugas Diselesaikan</div>
+    </div>
+    <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="stat-icon">👥</div>
+      <div class="stat-num counter" data-target="300">0</div><span class="stat-num" style="color:var(--primary)">+</span>
+      <div class="stat-label">Klien Puas</div>
+    </div>
+    <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-num counter" data-target="98">0</div><span class="stat-num" style="color:var(--primary)">%</span>
+      <div class="stat-label">Kepuasan Klien</div>
+    </div>
+    <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-num" style="font-size:2.5rem;font-weight:800;color:var(--primary);line-height:1;letter-spacing:-1px">24/7</div>
+      <div class="stat-label">Fast Response</div>
+    </div>
+  </div>
+</div>
+
+<!-- LAYANAN -->
+<section id="layanan">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:0" data-aos="fade-up">
+      <div class="section-badge" style="margin:0 auto 1rem">✨ Layanan Kami</div>
+      <h2 class="section-title" style="text-align:center">Layanan yang Bisa Kami Bantu</h2>
+      <p class="section-sub" style="margin:0.75rem auto 0;text-align:center">Berbagai kebutuhan akademik ditangani dengan profesional dan tepat waktu.</p>
+    </div>
+    <div class="layanan-grid">
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="layanan-icon"><span>📚</span></div>
+        <div class="layanan-name">Merangkum Materi</div>
+        <div class="layanan-desc">Ringkasan materi pelajaran yang padat dan mudah dipahami.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="50">
+        <div class="layanan-icon"><span>✍️</span></div>
+        <div class="layanan-name">Parafrase</div>
+        <div class="layanan-desc">Tulis ulang teks dengan bahasa yang lebih segar dan orisinal.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="layanan-icon"><span>📝</span></div>
+        <div class="layanan-name">Salin Ketik</div>
+        <div class="layanan-desc">Ketik ulang dokumen, catatan, atau materi dari berbagai format.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="layanan-icon"><span>📖</span></div>
+        <div class="layanan-name">Salin Tulis</div>
+        <div class="layanan-desc">Tulis ulang dokumen dengan tulisan tangan yang rapi dan jelas.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="layanan-icon"><span>📊</span></div>
+        <div class="layanan-name">PPT Presentasi</div>
+        <div class="layanan-desc">Desain slide presentasi profesional yang menarik dan informatif.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="layanan-icon"><span>📄</span></div>
+        <div class="layanan-name">Makalah</div>
+        <div class="layanan-desc">Penulisan makalah ilmiah sesuai format dan ketentuan akademik.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="layanan-icon"><span>📑</span></div>
+        <div class="layanan-name">Laporan</div>
+        <div class="layanan-desc">Pembuatan laporan praktikum, observasi, maupun kegiatan.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="350">
+        <div class="layanan-icon"><span>📚</span></div>
+        <div class="layanan-name">Essay</div>
+        <div class="layanan-desc">Penulisan essay argumentatif dan deskriptif yang berkualitas.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="layanan-icon"><span>📋</span></div>
+        <div class="layanan-name">Proposal</div>
+        <div class="layanan-desc">Penyusunan proposal kegiatan, penelitian, atau usaha.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="450">
+        <div class="layanan-icon"><span>🔍</span></div>
+        <div class="layanan-name">Cek Turnitin</div>
+        <div class="layanan-desc">Pengecekan keaslian tulisan dengan laporan Turnitin akurat.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="layanan-icon"><span>📈</span></div>
+        <div class="layanan-name">Riset Ringan</div>
+        <div class="layanan-desc">Pengumpulan data dan informasi untuk kebutuhan tugas riset.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="550">
+        <div class="layanan-icon"><span>🎨</span></div>
+        <div class="layanan-name">Desain Pamflet</div>
+        <div class="layanan-desc">Desain pamflet, poster, dan flyer yang menarik secara visual.</div>
+      </div>
+      <div class="layanan-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="layanan-icon"><span>📄</span></div>
+        <div class="layanan-name">Perbaikan Format</div>
+        <div class="layanan-desc">Rapikan format dan tata letak dokumen sesuai standar akademik.</div>
+      </div>
+      <!-- SPECIAL CARD -->
+      <div class="layanan-card layanan-special" data-aos="fade-up" data-aos-delay="650">
+        <div class="ls-text">
+          <h3>🤔 Tugas Lainnya?</h3>
+          <p>Tidak menemukan layanan yang sesuai? Kami menerima berbagai jenis tugas sekolah dan kuliah lainnya. Konsultasikan langsung dengan admin kami!</p>
+        </div>
+        <a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20memiliki%20tugas%20lain%20yang%20ingin%20dikonsultasikan." target="_blank" class="ls-btn">
+          💬 Hubungi Admin →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEUNGGULAN -->
+<section id="keunggulan">
+  <div class="container">
+    <div data-aos="fade-up">
+      <div class="section-badge">🏆 Kenapa V.JOKI?</div>
+      <h2 class="section-title">Kenapa Memilih V.JOKI?</h2>
+      <p class="section-sub">Kami hadir untuk memastikan tugasmu selesai dengan hasil terbaik dan tepat waktu.</p>
+    </div>
+    <div class="keunggulan-grid">
+      <div class="keunggulan-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="keunggulan-icon">⚡</div>
+        <div class="keunggulan-title">Pengerjaan Cepat</div>
+        <div class="keunggulan-desc">Deadline mendadak? Kami terbiasa mengerjakan tugas dengan tenggat waktu singkat tanpa mengorbankan kualitas.</div>
+      </div>
+      <div class="keunggulan-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="keunggulan-icon">💰</div>
+        <div class="keunggulan-title">Harga Menyesuaikan</div>
+        <div class="keunggulan-desc">Harga ditentukan berdasarkan tingkat kesulitan dan urgensi tugas — adil, transparan, dan bersahabat di kantong pelajar.</div>
+      </div>
+      <div class="keunggulan-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="keunggulan-icon">🔄</div>
+        <div class="keunggulan-title">Free Revisi</div>
+        <div class="keunggulan-desc">Tidak puas dengan hasilnya? Kami memberikan layanan revisi gratis sampai kamu benar-benar puas dengan hasilnya.</div>
+      </div>
+      <div class="keunggulan-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="keunggulan-icon">🛡️</div>
+        <div class="keunggulan-title">Privasi Terjamin</div>
+        <div class="keunggulan-desc">Semua data dan informasi tugasmu dijaga kerahasiaannya. Tidak ada kebocoran data ke pihak manapun, terjamin 100%.</div>
+      </div>
+      <div class="keunggulan-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="keunggulan-icon">📞</div>
+        <div class="keunggulan-title">Fast Response</div>
+        <div class="keunggulan-desc">Admin kami siap merespons pesanmu dengan cepat, 24/7. Tidak perlu menunggu lama untuk mendapatkan konfirmasi.</div>
+      </div>
+      <div class="keunggulan-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="keunggulan-icon">🏆</div>
+        <div class="keunggulan-title">Hasil Profesional</div>
+        <div class="keunggulan-desc">Setiap tugas dikerjakan dengan standar tinggi, referensi yang tepat, dan tata bahasa yang benar dan profesional.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARA PEMESANAN -->
+<section id="cara-pemesanan">
+  <div class="container">
+    <div style="text-align:center" data-aos="fade-up">
+      <div class="section-badge" style="margin:0 auto 1rem">📋 Proses Mudah</div>
+      <h2 class="section-title" style="text-align:center">Cara Pemesanan</h2>
+      <p class="section-sub" style="text-align:center;margin:0.75rem auto 0">Proses pemesanan mudah dan cepat hanya dalam beberapa langkah.</p>
+    </div>
+    <div class="steps-wrap">
+      <div class="steps-line"></div>
+      <div class="steps-grid">
+        <div class="step-item" data-aos="fade-up" data-aos-delay="0">
+          <div class="step-num">1<div class="step-icon">💬</div></div>
+          <div class="step-title">Hubungi Admin</div>
+          <div class="step-desc">Chat WhatsApp dan sampaikan kebutuhanmu kepada admin kami.</div>
+        </div>
+        <div class="step-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="step-num">2<div class="step-icon">📎</div></div>
+          <div class="step-title">Kirim Detail Tugas</div>
+          <div class="step-desc">Kirimkan detail lengkap tugas, deadline, dan ketentuan yang diperlukan.</div>
+        </div>
+        <div class="step-item" data-aos="fade-up" data-aos-delay="200">
+          <div class="step-num">3<div class="step-icon">💰</div></div>
+          <div class="step-title">Estimasi Harga</div>
+          <div class="step-desc">Admin akan memberikan estimasi harga yang sesuai dengan tugasmu.</div>
+        </div>
+        <div class="step-item" data-aos="fade-up" data-aos-delay="300">
+          <div class="step-num">4<div class="step-icon">⚙️</div></div>
+          <div class="step-title">Proses Pengerjaan</div>
+          <div class="step-desc">Tugas mulai dikerjakan oleh tim profesional kami setelah konfirmasi.</div>
+        </div>
+        <div class="step-item" data-aos="fade-up" data-aos-delay="400">
+          <div class="step-num" style="background:linear-gradient(135deg,var(--dark),#0e4a6e)">5<div class="step-icon">✅</div></div>
+          <div class="step-title">Hasil Dikirim</div>
+          <div class="step-desc">Hasil tugas dikirimkan tepat waktu sesuai deadline yang disepakati.</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:3rem" data-aos="fade-up">
+      <a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20memesan%20layanan." target="_blank" class="btn-primary" style="display:inline-flex">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Mulai Pesan Sekarang
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section id="testimoni">
+  <div class="container">
+    <div style="text-align:center" data-aos="fade-up">
+      <div class="section-badge" style="margin:0 auto 1rem">💬 Ulasan Klien</div>
+      <h2 class="section-title" style="text-align:center">Apa Kata Klien?</h2>
+      <p class="section-sub" style="text-align:center;margin:0.75rem auto 0">Ribuan pelajar dan mahasiswa sudah mempercayakan tugasnya kepada V.JOKI.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Makalah selesai lebih cepat dari deadline. Kualitasnya juga sangat memuaskan, referensi lengkap dan formatnya rapi banget!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AR</div>
+          <div><div class="testi-name">Andi Rahmawan</div><div class="testi-role">Mahasiswa Teknik, Surabaya</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"PPT presentasi yang dibuat sangat rapi dan profesional. Dosenku langsung memuji desainnya. Akan order lagi pastinya!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SN</div>
+          <div><div class="testi-name">Siti Nuraini</div><div class="testi-role">Mahasiswi Manajemen, Malang</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Pelayanan sangat cepat dan responsif. Chat langsung dibalas dan adminnya ramah banget. Harga juga sangat terjangkau!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">BP</div>
+          <div><div class="testi-name">Bagas Pratama</div><div class="testi-role">Siswa SMA, Sidoarjo</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Revisi mudah banget, admin langsung tanggap dan hasilnya memuaskan. Sudah 3 kali order dan selalu puas dengan hasilnya!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">DL</div>
+          <div><div class="testi-name">Dewi Lestari</div><div class="testi-role">Mahasiswi Pendidikan, Gresik</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Deadline besok pagi, order tengah malam, pagi sudah selesai! Luar biasa responsifnya. Proposal penelitianku sudah jadi sempurna!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">RM</div>
+          <div><div class="testi-name">Rizky Maulana</div><div class="testi-role">Mahasiswa Hukum, Surabaya</div></div>
+        </div>
+      </div>
+      <div class="testi-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Jasa pamflet desainnya keren banget! Teman-teman banyak yang tanya siapa yang desain. Rekomen banget untuk siapapun yang butuh!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">FA</div>
+          <div><div class="testi-name">Fitri Anggraeni</div><div class="testi-role">Mahasiswi Komunikasi, Mojokerto</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div style="text-align:center" data-aos="fade-up">
+      <div class="section-badge" style="margin:0 auto 1rem">❓ FAQ</div>
+      <h2 class="section-title" style="text-align:center">Pertanyaan yang Sering Ditanyakan</h2>
+      <p class="section-sub" style="text-align:center;margin:0.75rem auto 0">Temukan jawaban atas pertanyaan umum seputar layanan V.JOKI.</p>
+    </div>
+    <div class="faq-wrap" data-aos="fade-up" data-aos-delay="200">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          🔒 Apakah menggunakan layanan V.JOKI aman?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Ya, sangat aman. Semua data dan informasi tugasmu dijaga kerahasiaannya sepenuhnya. Kami tidak menyebarkan atau membagikan informasi kepada pihak manapun. Kepercayaan dan privasi klien adalah prioritas utama kami.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          🔄 Apakah ada layanan revisi?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Tentu! Kami menyediakan layanan revisi gratis jika hasil tidak sesuai dengan ketentuan awal yang sudah disepakati. Kami berkomitmen untuk memastikan kamu benar-benar puas dengan hasilnya sebelum tugas diselesaikan.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ⏰ Apakah bisa mengerjakan tugas mendadak?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Bisa banget! Kami sangat terbiasa dengan deadline yang mepet. Semakin singkat waktu pengerjaan maka akan ada penyesuaian harga, namun kami akan berusaha semaksimal mungkin untuk memenuhi deadline kamu.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          📅 Berapa lama waktu pengerjaannya?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Waktu pengerjaan bervariasi tergantung jenis dan tingkat kesulitan tugas. Untuk tugas ringan bisa selesai dalam beberapa jam. Untuk makalah atau proposal yang lebih kompleks biasanya 1-3 hari. Waktu pasti akan dikonfirmasi setelah admin melihat detail tugasmu.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          💳 Bagaimana sistem pembayaran?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Pembayaran dilakukan melalui transfer bank, dompet digital (GoPay, OVO, Dana), atau metode lain yang disepakati. Sistem pembayaran bisa DP terlebih dahulu atau full payment — disesuaikan dengan kesepakatan antara kamu dan admin.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          🛡️ Apakah data tugas saya aman?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">100% aman dan terjamin. Semua file dan dokumen yang kamu kirimkan hanya digunakan untuk keperluan pengerjaan tugasmu saja. Kami tidak akan membagikan, menjual, atau menggunakan data tersebut untuk tujuan lain apapun.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-blob cta-blob-1"></div>
+  <div class="cta-blob cta-blob-2"></div>
+  <div class="container">
+    <div class="cta-content" data-aos="fade-up">
+      <div class="section-badge" style="margin:0 auto 1rem">🚀 Siap Membantu</div>
+      <h2 class="cta-title">Jangan Biarkan Deadline Mengganggu Harimu</h2>
+      <p class="cta-sub">Konsultasikan kebutuhan tugasmu sekarang dan dapatkan bantuan yang cepat, profesional, dan sesuai kebutuhanmu.</p>
+      <a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20memesan%20layanan." target="_blank" class="cta-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chat WhatsApp Sekarang
+      </a>
+      <div class="cta-badges">
+        <span class="cta-badge">✅ Free Revisi</span>
+        <span class="cta-badge">✅ Harga Bersahabat</span>
+        <span class="cta-badge">✅ Deadline Mendadak Bisa</span>
+        <span class="cta-badge">✅ Fast Response</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="kontak">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">V<span>.</span>JOKI</div>
+        <p class="footer-desc">Layanan bantuan tugas sekolah dan kuliah yang cepat, profesional, dan terpercaya.</p>
+        <div class="footer-contact">
+          <a href="https://wa.me/6285755787055" target="_blank">
+            <span class="footer-contact-icon">📱</span> 0857-5578-7055
+          </a>
+          <a href="https://instagram.com/v.jokii" target="_blank">
+            <span class="footer-contact-icon">📸</span> @v.jokii
+          </a>
+        </div>
+        <a href="https://wa.me/6285755787055?text=Halo%20Admin%20V.JOKI,%20saya%20ingin%20bertanya%20tentang%20layanan%20yang%20tersedia." target="_blank" class="footer-wa-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat WhatsApp
+        </a>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigasi</div>
+        <div class="footer-links">
+          <a href="#beranda">Beranda</a>
+          <a href="#layanan">Layanan</a>
+          <a href="#keunggulan">Keunggulan</a>
+          <a href="#testimoni">Testimoni</a>
+          <a href="#faq">FAQ</a>
+          <a href="#kontak">Kontak</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Layanan Utama</div>
+        <div class="footer-links">
+          <a href="#layanan">Makalah & Essay</a>
+          <a href="#layanan">PPT Presentasi</a>
+          <a href="#layanan">Laporan & Proposal</a>
+          <a href="#layanan">Cek Turnitin</a>
+          <a href="#layanan">Desain Pamflet</a>
+          <a href="#layanan">Parafrase</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 V.JOKI. All Rights Reserved.</div>
+      <div class="footer-tagline">Bantu tugasmu, wujudkan prestasimu.</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+// AOS INIT
+AOS.init({duration:700,easing:'ease-out-cubic',once:true,offset:60});
+
+// LOADER
+window.addEventListener('load',function(){
+  setTimeout(function(){
+    document.getElementById('loader').classList.add('hide');
+  },1800);
+});
+
+// SCROLL PROGRESS
+window.addEventListener('scroll',function(){
+  var scrollTop=document.documentElement.scrollTop;
+  var scrollHeight=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('scroll-progress').style.width=(scrollTop/scrollHeight*100)+'%';
+});
+
+// NAVBAR SCROLL
+window.addEventListener('scroll',function(){
+  var nav=document.getElementById('navbar');
+  if(window.scrollY>50){nav.classList.add('scrolled')}else{nav.classList.remove('scrolled')}
+});
+
+// HAMBURGER
+document.getElementById('hamburger').addEventListener('click',function(){
+  this.classList.toggle('active');
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+document.querySelectorAll('.mob-link').forEach(function(a){
+  a.addEventListener('click',function(){
+    document.getElementById('hamburger').classList.remove('active');
+    document.getElementById('mobile-menu').classList.remove('open');
+  });
+});
+
+// FAQ ACCORDION
+function toggleFaq(btn){
+  var item=btn.parentElement;
+  var isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(el){el.classList.remove('open')});
+  if(!isOpen){item.classList.add('open')}
+}
+
+// COUNTER ANIMATION
+function animateCounters(){
+  document.querySelectorAll('.counter').forEach(function(el){
+    var target=parseInt(el.getAttribute('data-target'));
+    var start=0;
+    var duration=1800;
+    var step=target/duration*16;
+    var timer=setInterval(function(){
+      start+=step;
+      if(start>=target){start=target;clearInterval(timer)}
+      el.textContent=Math.floor(start);
+    },16);
+  });
+}
+var counterDone=false;
+window.addEventListener('scroll',function(){
+  if(counterDone)return;
+  var stats=document.getElementById('stats-section');
+  if(!stats)return;
+  var rect=stats.getBoundingClientRect();
+  if(rect.top<window.innerHeight-100){
+    counterDone=true;
+    animateCounters();
+  }
+});
+</script>
+</body>
+</html>
